@@ -1,5 +1,5 @@
 {
-    "name": "ViniciusBezerra94/ecommerce",
+    "name": "viniciusbezerra94/ecommerce",
     "authors": [
         {
             "name": "Vinicius Bezerra"
@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": "vendor/ecommerce/php-classes/src/"
+            "Hcode\\": "vendor/hcodebr/php-classes/src/"
         }
     }
 }
