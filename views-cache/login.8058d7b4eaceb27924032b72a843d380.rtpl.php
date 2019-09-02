@@ -67,7 +67,7 @@
     </div>
     <!-- /.social-auth-links -->
 
-    <a href="#">I forgot my password</a><br>
+    <a href="/hcode_ecommerce/admin/forgot">I forgot my password</a><br>
     <a href="/hcode_ecommerce/res/admin/register.html" class="text-center">Register a new membership</a>
 
   </div>
