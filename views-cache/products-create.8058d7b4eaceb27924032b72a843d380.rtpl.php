@@ -51,7 +51,7 @@
             </div>
             <div class="form-group">
               <label for="desurl">Nome da produto</label>
-              <input type="url" class="form-control" id="desurl" name="desurl" placeholder="https://example.com" ">
+              <input type="text" class="form-control" id="desurl" name="desurl" placeholder="https://example.com" ">
             </div>
           </div>
           <!-- /.box-body -->
