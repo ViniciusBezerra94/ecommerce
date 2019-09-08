@@ -7,23 +7,13 @@ use \Hcode\Model\Product;
 
 
 $app->get('/', function() {
-    
-	$page = new Page();
-	$page->setTpl("index");
-
-});
-
-$app->get('/categories/:idcategory',function($idcategory){
-	User::verifyLogin();
-
-	$category = new Category();
-
-	$category->get((int ) $idcategory);
+	
+	$products = Product::listAll();
 
 	$page = new Page();
-	$page->setTpl("category", array(
-		"category" => $category->getValues(),
-		"products" => array()
+	$page->setTpl("index", array(
+		"product" => Product::checkList($products)
 	));
 
 });
+
