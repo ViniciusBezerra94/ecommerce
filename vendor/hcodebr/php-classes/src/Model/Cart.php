@@ -39,7 +39,7 @@ class Cart extends Model
 
             }
         }
-
+        return $cart;
     }
 
     public function setToSession(){
@@ -87,4 +87,48 @@ class Cart extends Model
         $this->setData($results[0]);
     }
 
+    public function addProduct(Product $product)
+    {
+        $sql = new Sql();
+        $sql->query("Insert into tb_cartsproducts (idcart, idproduct) values (:idcart, :idproduct)", array(
+            ":idcart" => $this->getidcart(),
+            ':idproduct' => $product->getidproduct()
+        ));
+    }
+
+    public function removeProduct(Product $product, $all = false)
+    {
+        $sql = new Sql();
+
+        if($all)
+        {
+            $sql->query("UPDATE tb_cartsproducts SET dtremoved = now() where idcart = :idcart
+            and idproduct = :idproduct and dtremoved is null", array(
+                ':idcart' => $this->getidcart(),
+                ':idproduct' => $product->getidproduct()
+            ));
+        }
+        else
+        {
+            $sql->query("UPDATE tb_cartsproducts SET dtremoved = now() where idcart = :idcart
+            and idproduct = :idproduct and dtremoved IS NULL limit 1", array(
+                ':idcart' => $this->getidcart(),
+                ':idproduct' => $product->getidproduct()
+            ));
+        }
+    }
+
+    public function getProducts()
+    {
+        $sql = new Sql();
+        return Product::checkList($sql->select("SELECT b.idproduct,b.desproduct,b.vlprice,b.vlwidth,b.vlheight,b.vllength,b.vlweight,b.desurl,count(*) as nrqtd, SUM(b.vlprice) as vltotal
+        from tb_cartsproducts a 
+        inner join tb_products b on a.idproduct = b.idproduct 
+        where a.idcart = :idcart 
+        and a.dtremoved is null
+        group by b.idproduct,b.desproduct,b.vlprice,b.vlwidth,b.vlheight,b.vllength,b.vlweight, b.desurl
+        order by b.desproduct", array(
+            ':idcart'=>$this->getidcart()
+        )));
+    }
 }
