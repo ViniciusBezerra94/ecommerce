@@ -58,7 +58,6 @@ class User extends Model
         {
 
             $user = new User();
-            $data['desperson'] = utf8_encode($ata['desperson']);
             $user->setData($data);
 
             $_SESSION[User::SESSION] = $user->getValues();
@@ -262,11 +261,34 @@ class User extends Model
         $_SESSION[User::ERROR_REGISTER] = $msg;
     }
 
+    public static function getErrorRegister()
+    {
+        $msg = ( isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]  ? $_SESSION[User::ERROR_REGISTER] : "");
+        User::clearErrorRegister();
+    }
+
+    public static function clearErrorRegister()
+    {
+        $_SESSION[User::ERROR_REGISTER] = NULL;
+    }
+
     public static function getPasswordHash($password)
     {
         return password_hash($password,PASSWORD_DEFAULT, array(
             'cost' => 12
         ));
     }
+
+    public static function checkLoginExist($login)
+    {
+        $sql = new Sql();
+        $results = $sql->select("SELECT * from tb_users where deslogin = :deslogin", array(
+            ':deslogin'=> $login
+        ));
+
+        return (count($results) > 0);
+
+    }
+
 
 }
