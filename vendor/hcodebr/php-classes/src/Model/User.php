@@ -45,7 +45,8 @@ class User extends Model
     public static function login($login,$password)
     {
         $sql = new Sql();
-        $results = $sql->select("SELECT * from tb_users where deslogin = :LOGIN", array(
+        //$results = $sql->select("SELECT * from tb_users where deslogin = :LOGIN", array(
+        $results = $sql->select("SELECT * from tb_users a inner join tb_persons b using(idperson) where a.deslogin = :LOGIN", array(
             ":LOGIN" => $login
         ));
         if(count($results) === 0 )
@@ -58,6 +59,7 @@ class User extends Model
         {
 
             $user = new User();
+            $data['desperson'] = utf8_encode($data['desperson']);
             $user->setData($data);
 
             $_SESSION[User::SESSION] = $user->getValues();
@@ -118,7 +120,7 @@ class User extends Model
 
         $data = $results[0];
 
-        $data['desperson'] = utf8_encode($ata['desperson']);
+        $data['desperson'] = utf8_encode($data['desperson']);
 
         $this->setData($data);
     }
@@ -147,7 +149,7 @@ class User extends Model
         ));
     }
 
-    public static function getForgot($email){
+    public static function getForgot($email, $inadmin = true){
         $sql = new Sql();
         $results = $sql->select("SELECT * FROM tb_persons a inner join tb_users b USING(idperson) where a.desemail = :email", array(
             ":email" => $email
@@ -174,7 +176,13 @@ class User extends Model
             $IV = substr(hash('sha256', USER::CIFRA), 0, 16);
 
             $code = base64_encode(openssl_encrypt($dataRecovery['idrecovery'], User::CIFRA,User::SECRET, 0, $IV));
-            $link = "http://localhost/hcode_ecommerce/admin/forgot/reset?code=$code";
+            if($inadmin){
+                $link = "http://localhost/hcode_ecommerce/admin/forgot/reset?code=$code";
+            }else{
+                $link = "http://localhost/hcode_ecommerce/forgot/reset?code=$code";
+            }
+            
+            
 
             $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir Senha da Hcode Store","forgot",array(
                 "name"=>$data["desperson"],
