@@ -282,3 +282,65 @@ $app->post('/forgot/reset',function(){
 	$page->setTpl("forgot-reset-success");
 
 });
+
+$app->get("/profile",function(){
+
+	User::verifyLogin(false);
+	$page = new Page();
+
+	$user = User::getFromSession();
+
+
+	$page->setTpl("profile", array(
+		'user'=>$user->getValues(),
+		'profileMsg'=> User::getSuccess(),
+		'profileError'=> User::getError()
+	));
+
+});
+
+$app->post("/profile",function(){
+
+	User::verifyLogin(false);
+
+	if( !isset($_POST['desperson']) || $_POST['desperson'] === '' )
+	{
+		User::setError("Preencha o seu nome. ");
+		header("Location: /hcode_ecommerce/profile");
+		exit;
+	}
+
+	if( !isset($_POST['desemail']) || $_POST['desemail'] === '' )
+	{
+		User::setError("Preencha o seu e-mail. ");
+		header("Location: /hcode_ecommerce/profile");
+		exit;
+	}
+
+	$user = User::getFromSession();
+
+	if($_POST['desemail'] !== $user->getdesemail()){
+		if(User::checkLoginExists($_POST['desemail']))
+		{
+			User::setError("Este endereço de e-mail já está cadastrado. ");
+			header("Location: /hcode_ecommerce/profile");
+			exit;
+		}
+
+	}
+
+
+
+
+	$_POST['inadmin'] = $user->getinadmin();
+	$_POST['despassword'] = $user->getpassword();
+	$_POST['deslogin'] = $_POST['desemail'];
+	$user->setData($_POST);
+
+	$user->update();
+	User::setSuccess("Dados alterados com sucesso!");
+
+	header("Location: /hcode_ecommerce/profile");
+	exit;
+
+});

@@ -12,6 +12,7 @@ class User extends Model
     const CIFRA = "AES-256-CBC";
     const ERROR = "UserError";
     const ERROR_REGISTER = "UserErrorRegister";
+    const SUCCESS = "UserSuccess";
 
     public static function getFromSession()
     {
@@ -296,6 +297,23 @@ class User extends Model
 
         return (count($results) > 0);
 
+    }
+
+
+    public static function setSuccess($msg){
+        $_SESSION[User::SUCCESS] = $msg;
+    }
+
+    public static function getSuccess()
+    {
+        $msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS] ? $_SESSION[User::SUCCESS] : "" );
+        User::clearSuccess();
+        return $msg;
+    }
+
+    public static function clearSuccess()
+    {
+        $_SESSION[User::SUCCESS] = NULL;
     }
 
 

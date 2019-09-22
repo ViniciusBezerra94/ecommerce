@@ -45,7 +45,7 @@
                             <li><a href="/hcode_ecommerce/cart"><i class="fa fa-shopping-cart"></i> Meu Carrinho</a></li>
                             <?php if( checkLogin(false) ){ ?>
 
-                            <li><a href="/hcode_ecommerce/profiles"><i class="fa fa-user"></i> <?php echo getUserName(); ?> </a></li>
+                            <li><a href="/hcode_ecommerce/profile"><i class="fa fa-user"></i> <?php echo getUserName(); ?> </a></li>
                             <li><a href="/hcode_ecommerce/logout"><i class="fa fa-close"></i> Sair</a></li>
                             <?php }else{ ?>
 
