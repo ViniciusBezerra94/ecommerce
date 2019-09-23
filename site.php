@@ -172,39 +172,39 @@ $app->post("/checkout",function(){
 
 	User::verifyLogin(false);
 
-	if( !isset($_POST['zipcode']) || $_POST['zipcode'] )
+	if( !isset($_POST['zipcode']) || $_POST['zipcode'] === '' )
 	{
 		Address::setMsgError("Informe o Cep. ");
 		header("Location: /hcode_ecommerce/checkout");
 		exit;
 	}
 
-	if( !isset($_POST['desaddress']) || $_POST['desaddress'] )
+	if( !isset($_POST['desaddress']) || $_POST['desaddress'] === '' )
 	{
 		Address::setMsgError("Informe o endereço. ");
 		header("Location: /hcode_ecommerce/checkout");
 		exit;
 	}
-	if( !isset($_POST['desdestrict']) || $_POST['desdestrict'] )
+	if( !isset($_POST['desdistrict']) || $_POST['desdistrict'] === '' )
 	{
 		Address::setMsgError("Informe o bairro. ");
 		header("Location: /hcode_ecommerce/checkout");
 		exit;
 	}
-	if( !isset($_POST['descity']) || $_POST['descity'] )
+	if( !isset($_POST['descity']) || $_POST['descity'] === '' )
 	{
 		Address::setMsgError("Informe a cidade. ");
 		header("Location: /hcode_ecommerce/checkout");
 		exit;
 	}
 
-	if( !isset($_POST['desstate']) || $_POST['desstate'] )
+	if( !isset($_POST['desstate']) || $_POST['desstate'] === '' )
 	{
 		Address::setMsgError("Informe o estado. ");
 		header("Location: /hcode_ecommerce/checkout");
 		exit;
 	}
-	if( !isset($_POST['descountry']) || $_POST['descountry'] )
+	if( !isset($_POST['descountry']) || $_POST['descountry'] === '' )
 	{
 		Address::setMsgError("Informe o país. ");
 		header("Location: /hcode_ecommerce/checkout");
