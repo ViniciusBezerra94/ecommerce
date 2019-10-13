@@ -316,5 +316,22 @@ class User extends Model
         $_SESSION[User::SUCCESS] = NULL;
     }
 
+    public function getOrders()
+    {
+        $sql = new Sql();
+        $results = $sql->select("SELECT * from tb_orders a 
+                inner join tb_ordersstatus b USING(idstatus)
+                inner join tb_carts c USING(idcart)
+                inner join tb_users d on d.iduser = a.iduser
+                inner join tb_addresses e using(idaddress)
+                inner join tb_persons f ON f.idperson = d.idperson
+                WHERE a.iduser = :iduser
+        ", array(
+            ':iduser' => $this->getiduser()
+        ));
+
+        return $results;
+
+    }
 
 }
