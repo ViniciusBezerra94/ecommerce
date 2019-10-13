@@ -39,3 +39,8 @@ function getCartNrQtd()
 
     return $totals['nrqtd'];
 }
+
+function formatDate($date)
+{
+    return date('d/m/Y',strtotime($date));
+}

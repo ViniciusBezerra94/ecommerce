@@ -4,6 +4,7 @@ use \Hcode\DB\Sql;
 Use \Hcode\Model;
 use \Hcode\Model\Product;
 use \Hcode\Model\User;
+use \Hcode\Model\Cart;
 
 
 class Cart extends Model
