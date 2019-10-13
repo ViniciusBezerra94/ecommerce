@@ -114,4 +114,71 @@ class Order extends Model
         $_SESSION[Order::ERROR] = NULL;
     }
 
+
+    public static function getPage($page = 1, $itemsPerPage = 3 )
+    {
+
+        $start = ($page -1 ) * $itemsPerPage;
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+        from tb_orders a 
+                inner join tb_ordersstatus b USING(idstatus)
+                inner join tb_carts c USING(idcart)
+                inner join tb_users d on d.iduser = a.iduser
+                inner join tb_addresses e using(idaddress)
+                inner join tb_persons f ON f.idperson = d.idperson 
+                ORDER BY a.dtregister DESC
+        LIMIT $start, $itemsPerPage;
+        ");
+
+        $resultTotal = $sql->select("Select FOUND_ROWS() as nrtotal;");
+
+
+
+        return array(
+            'data'=> $results,
+            'total' => (int) $resultTotal[0]['nrtotal'],
+            'pages' => ceil( $resultTotal[0]['nrtotal'] / $itemsPerPage)
+
+        );
+
+    }
+
+    public static function getPageSearch($search, $page = 1, $itemsPerPage = 3 )
+    {
+
+        $start = ($page -1 ) * $itemsPerPage;
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+        from tb_orders a 
+        inner join tb_ordersstatus b USING(idstatus)
+        inner join tb_carts c USING(idcart)
+        inner join tb_users d on d.iduser = a.iduser
+        inner join tb_addresses e using(idaddress)
+        inner join tb_persons f ON f.idperson = d.idperson 
+        WHERE a.idorder = :id OR f.desperson LIKE :search
+        ORDER BY a.dtregister DESC
+        LIMIT $start, $itemsPerPage;
+        ", array(
+            ':search' => '%' . $search . '%',
+            ':id' => $search
+        ));
+
+        $resultTotal = $sql->select("Select FOUND_ROWS() as nrtotal;");
+
+
+
+        return array(
+            'data'=> $results,
+            'total' => (int) $resultTotal[0]['nrtotal'],
+            'pages' => ceil( $resultTotal[0]['nrtotal'] / $itemsPerPage)
+
+        );
+
+    }
+
 }
