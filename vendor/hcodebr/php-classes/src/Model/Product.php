@@ -158,4 +158,60 @@ class Product extends Model
        array (":idproduct" => $this->getidproduct() ) ); 
     }
 
+
+    public static function getPage($page = 1, $itemsPerPage = 3 )
+    {
+
+        $start = ($page -1 ) * $itemsPerPage;
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+        from tb_products order by desproduct
+        LIMIT $start, $itemsPerPage;
+        ");
+
+        $resultTotal = $sql->select("Select FOUND_ROWS() as nrtotal;");
+
+
+
+        return array(
+            'data'=> $results,
+            'total' => (int) $resultTotal[0]['nrtotal'],
+            'pages' => ceil( $resultTotal[0]['nrtotal'] / $itemsPerPage)
+
+        );
+
+    }
+
+    public static function getPageSearch($search, $page = 1, $itemsPerPage = 3 )
+    {
+
+        $start = ($page -1 ) * $itemsPerPage;
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+        from tb_products
+        where desproduct like :search
+        order by desproduct
+        LIMIT $start, $itemsPerPage;
+        ", array(
+            'search' => '%' . $search . '%'
+        ));
+
+        $resultTotal = $sql->select("Select FOUND_ROWS() as nrtotal;");
+
+
+
+        return array(
+            'data'=> $results,
+            'total' => (int) $resultTotal[0]['nrtotal'],
+            'pages' => ceil( $resultTotal[0]['nrtotal'] / $itemsPerPage)
+
+        );
+
+    }
+
+
 }
